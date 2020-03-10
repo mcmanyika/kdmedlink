@@ -92,13 +92,8 @@ else:
         'PASSWORD': 'focus2023',
         'HOST': 'localhost',
         'PORT': '',
-    },
-
-    'secondary': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        }
     }
+}
 
 
 # Password validation
