@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Daily Call Log{% endblock %}
+
+{% block content %}
+<div class="container">
+<h3>{{trip_no }} <br /><br />
+Driver : {{driver}}</h3><br />
+<h4>{{notes}}</h4><br />
+{{private_notes}}
+</div>
+{% endblock content %}

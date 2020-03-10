@@ -1,0 +1,239 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Daily Call Log{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+      <div class="col-md-4 ">
+        <h3>ADD CALL</h3>
+        <form id="addUser" action="">
+          <div class="form-group">
+            <input class="form-control" type="text" name="trip_no" placeholder="Trip Number" required>
+          </div>
+          <div class="form-group">
+            <select name="driver" class="form-control" required>
+              {% for rw in staff %}
+              <option value="{{rw.name}}">{{rw.name}}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="form-group">
+            <select name="notes" class="form-control" required>
+              {% for rw in dict %}
+                {% if rw.category == 'notes' %}
+                  <option value="{{rw.name}}">{{rw.name}}</option>
+                {% endif %}
+              {% endfor %}
+            </select>
+          </div>
+          <div class="form-group">
+             <textarea  name="private_notes" class="form-control" rows="10">
+              </textarea> 
+          </div>
+          <button class="btn btn-primary form-control" type="submit">SUBMIT</button>
+          <input type="hidden" name="user" value="{{ request.user.id }}">
+          <input type="hidden" name="timestamp" value="">
+        </form>
+      </div>
+      <div class="col-md-8">
+        <h3>CALL LOG</h3>
+        <table id="userTable" class="table table-striped">
+          <tr>
+            <th>Trip No</th>
+            <th>Driver</th>
+            <th colspan="3">Notes</th>
+          </tr>
+          {% for call in calls %}
+          <tr id="call-{{call.id}}">
+              <td class="userName userData" name="name">{{call.trip_no}}</td>
+              <td class="userAddress userData" name="address">{{call.driver}}</td>
+              <td class="userAge userData" name="age"><a href="#call{{call.id}}" data-toggle="modal">{{call.notes}}</a></td>
+              
+              <td align="center" width="5%">
+                  <button class="btn btn-danger form-control" onClick="deleteCall({{call.id}})">DELETE</button>
+              </td>
+          </tr>
+          {% endfor %}
+        </table>
+      </div>
+    </div>
+  </div>
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">Update call</h4>
+        </div>
+        <form id="updateCall" action="">
+        <div class="modal-body">
+            <input class="form-control" id="form-id" type="hidden" name="formId"/>
+            <label for="trip_no">Trip No</label>
+            <input class="form-control" id="form-trip_no" type="text" name="formTrip_no"/>
+            <label for="driver">Driver</label>
+            <input class="form-control" id="form-driver" type="text" name="formDriver"/>
+            <label for="notes">Notes</label>
+            <input class="form-control" id="form-notes" type="text" name="formNotes"/>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary" >Save changes</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block javascript %}
+
+{% for call in calls %}
+<div id="call{{call.id}}" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-body">
+              <iframe src="{% url 'call-details' call.id %}" width="100%" frameborder="0" height="500"></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endfor %}  
+
+<script>
+// Create Django Ajax Call
+$("form#addUser").submit(function() {
+    var trip_no = $('input[name="trip_no"]').val().trim();
+    var driver = $('select[name="driver"]').val().trim();
+    var notes = $('select[name="notes"]').val().trim();
+    var private_notes = $('textarea[name="private_notes"]').val().trim();
+    var timestamp = $('input[name="timestamp"]').val().trim();
+    var user = $('input[name="user"]').val().trim();
+    if (trip_no && driver && notes) {
+        // Create Ajax Call
+        $.ajax({
+            url: '{% url "trip_ajax_create" %}',
+            data: {
+                'trip_no': trip_no,
+                'driver': driver,
+                'notes': notes,
+                'private_notes': private_notes,
+                'timestamp': timestamp,
+                'user': user,
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (data.call) {
+                  appendToUsrTable(data.call);
+                }
+            }
+        });
+
+    } else {
+        alert("All fields must have a valid value.");
+    }
+    $('form#addUser').trigger("reset");
+    return false;
+});
+
+
+// Delete Django Ajax Call
+function deleteCall(id) {
+  var action = confirm("Are you sure you want to delete this user?");
+  if (action != false) {
+    $.ajax({
+        url: '{% url "trip_ajax_delete" %}',
+        data: {
+            'id': id,
+        },
+        dataType: 'json',
+        success: function (data) {
+            if (data.deleted) {
+              $("#userTable #call-" + id).remove();
+            }
+        }
+    });
+  }
+}
+
+
+// Create Django Ajax Call
+$("form#updateCall").submit(function() {
+    var idInput = $('input[name="formId"]').val().trim();
+    var trip_noInput = $('input[name="formTrip_no"]').val().trim();
+    var driverInput = $('input[name="formDriver"]').val().trim();
+    var notesInput = $('input[name="formNotes"]').val().trim();
+    if (trip_noInput && driverInput) {
+        // Create Ajax Call
+        $.ajax({
+            url: '{% url "trip_ajax_update" %}',
+            data: {
+                'id': idInput,
+                'trip_no': trip_noInput,
+                'driver': driverInput,
+                'notes': notesInput
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (data.call) {
+                  updateToUserTable(data.call);
+                }
+            }
+        });
+
+    } else {
+        alert("All fields must have a valid value.");
+    }
+    $('form#updateCall').trigger("reset");
+    $('#myModal').modal('hide');
+    return false;
+});
+
+
+// Update Django Ajax Call
+function editCall(id) {
+  if (id) {
+    tr_id = "#call-" + id;
+    trip_no = $(tr_id).find(".userName").text();
+    driver = $(tr_id).find(".userAddress").text();
+    notes = $(tr_id).find(".userAge").text();
+    $('#form-id').val(id);
+    $('#form-name').val(trip_no);
+    $('#form-address').val(driver);
+    $('#form-age').val(notes);
+  }
+}
+
+function appendToUsrTable(call) {
+  $("#userTable > tbody:last-child").append(`
+        <tr id="call-${call.id}">
+            <td class="userName" name="trip_no">${call.trip_no}</td>
+            '<td class="userAddress" name="driver">${call.driver}</td>
+            '<td class="userAge" name="notes"><a href="#call${call.id}" data-toggle="modal">${call.notes}</a></td>
+            '
+            <td align="center">
+                <button class="btn btn-danger form-control" onClick="deleteCall(${call.id})">DELETE</button>
+            </td>
+        </tr>
+    `);
+}
+
+function updateToUserTable(call){
+    $("#userTable #call-" + call.id).children(".userData").each(function() {
+        var attr = $(this).attr("trip_no");
+        if (attr == "trip_no") {
+          $(this).text(call.trip_no);
+        } else if (attr == "driver") {
+          $(this).text(call.driver);
+        } else if (attr == "notes") {
+          $(this).text(call.notes);
+        }
+      });
+}
+</script>
+
+{% endblock javascript %}
