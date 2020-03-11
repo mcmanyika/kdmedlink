@@ -21,7 +21,7 @@ class t_staff(models.Model):
 		return 't_staff {}'.format(self.id)
 
 class t_calls(models.Model):
-	# rootid = models.ForeignKey(t_staff, on_delete=models.CASCADE)
+	rootid = models.ForeignKey(t_staff, on_delete=models.CASCADE)
 	trip_no = models.CharField(max_length=10, blank=True, null=True)
 	driver = models.CharField(max_length=30, blank=True)
 	notes = models.CharField(max_length=100, blank=True)
