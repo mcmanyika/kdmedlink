@@ -10,7 +10,7 @@ class CrudUser(models.Model):
         return 'CrudUser {}'.format(self.id)
 
 class t_staff(models.Model):
-	name = models.CharField(max_length=50, blank=True, null=True)
+	name = models.CharField(max_length=40, blank=True, null=True)
 	position = models.CharField(max_length=30)
 	status = models.CharField(max_length=30, default='Active')
 	user = models.IntegerField(default=1, null=True, blank=True)
