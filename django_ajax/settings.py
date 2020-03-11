@@ -87,7 +87,7 @@ else:
     DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'kdmedlink',
+        'NAME': 'bigboy',
         'USER': 'kd_admin',
         'PASSWORD': 'focus2023',
         'HOST': 'localhost',
