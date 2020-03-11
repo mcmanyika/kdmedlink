@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'q$ecs+m%k9@y35ubgx(jqg32%52fyfd8dybgw+p$k(ais1+6_o'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['159.89.83.174']
 
@@ -81,15 +81,6 @@ if DEBUG:
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
             'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        },
-    
-        'def2': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'kdmedlink',
-            'USER': 'kd_admin',
-            'PASSWORD': 'focus2023',
-            'HOST': 'localhost',
-            'PORT': '',
         }
     }    
 else:    
