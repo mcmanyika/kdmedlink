@@ -7,10 +7,21 @@ For more information on this file, see
 https://docs.djangoproject.com/en/2.2/howto/deployment/wsgi/
 """
 
+
 import os
+import django
+from django.core.handlers.wsgi import WSGIHandler
 
-from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django_ajax.settings')
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "django_ajax.settings")
+django.setup(set_prefix=False)
 
-application = get_wsgi_application()
+application = WSGIHandler()
+
+# import os
+
+# from django.core.wsgi import get_wsgi_application
+
+# os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django_ajax.settings')
+
+# application = get_wsgi_application()
