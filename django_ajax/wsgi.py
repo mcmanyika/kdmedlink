@@ -8,20 +8,11 @@ https://docs.djangoproject.com/en/2.2/howto/deployment/wsgi/
 """
 
 
+
 import os
-import django
-from django.core.handlers.wsgi import WSGIHandler
 
+from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "django_ajax.settings")
-django.setup(set_prefix=False)
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django_ajax.settings')
 
-application = WSGIHandler()
-
-# import os
-
-# from django.core.wsgi import get_wsgi_application
-
-# os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django_ajax.settings')
-
-# application = get_wsgi_application()
+application = get_wsgi_application()
