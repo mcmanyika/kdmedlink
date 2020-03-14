@@ -14,8 +14,8 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
-from django.conf.urls import include, url
+from django.urls import path, include
+from django.conf.urls import url
 from django.views.generic import TemplateView
 
 from django.conf import settings
@@ -28,14 +28,19 @@ urlpatterns = [
 
     # Django Ajax CRUD Operations
     # path('', CrudView.as_view(), name='crud_ajax'),
+    path('', include('allauth.urls')),
     path('ajax/crud/create/', CreateCrudUser.as_view(), name='crud_ajax_create'),
     path('ajax/crud/delete/', DeleteCrudUser.as_view(), name='crud_ajax_delete'),
     path('ajax/crud/update/', UpdateCrudUser.as_view(), name='crud_ajax_update'),
-    path('', CallsView.as_view(), name='call_log'),
+    path('accounts/profile/', CallsView.as_view(), name='call_log'),
     path('ajax/trip/create/', CreateCall.as_view(), name='trip_ajax_create'),
     path('ajax/trip/delete/', DeleteCall.as_view(), name='trip_ajax_delete'),
     path('ajax/trip/update/', UpdateTrip.as_view(), name='trip_ajax_update'),
     url(r'^call-details/(?P<id>.*)$', call_details, name='call-details'),
 
+    
 
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+] 
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

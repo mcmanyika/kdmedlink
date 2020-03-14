@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'q$ecs+m%k9@y35ubgx(jqg32%52fyfd8dybgw+p$k(ais1+6_o'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['192.241.140.156']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -37,11 +37,20 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # Auth module
+    'django.contrib.sites',
+
     'crispy_forms',
     
     'crud_ajax',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+
 
 ]
+
+SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -54,6 +63,11 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'django_ajax.urls'
+# Auth modules 
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
 
 TEMPLATES = [
     {

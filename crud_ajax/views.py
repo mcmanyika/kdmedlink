@@ -1,11 +1,14 @@
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import  login_required
 from .models import CrudUser, t_calls, t_staff, t_dict
 from django.views.generic import TemplateView, View, DeleteView
 from django.core import serializers
 from django.http import JsonResponse
 
 # view front page
+@login_required(login_url='/login/')
 class CrudView(TemplateView):
     template_name = 'crud_ajax/crud.html'
     def get_context_data(self, **kwargs):
@@ -64,6 +67,10 @@ class UpdateCrudUser(View):
         }
         return JsonResponse(data)
 
+
+
+    
+# @login_required(login_url='/login/')
 class CallsView(TemplateView):
     template_name = 'calls.html'
     def get_context_data(self, **kwargs):
@@ -155,3 +162,8 @@ def call_details(request, id):
     template = 'call_details.html'
 
     return render (request, template, context)
+
+def Logout(request):
+    logout(request)
+    return HttpResponseRedirect('/')
+
