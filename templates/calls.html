@@ -102,15 +102,6 @@
       </div>
   {% endfor %}  
 
-  {% for rw in calls %}
-  <div id="overlay" class="overlay">
-  <a href="javascript:void(0)" class="closebtn" onclick="closeOverlay()">&times;</a>
-  <div class="overlay-content">
-    <iframe src="{% url 'call-details' call.id %}" width="100%" frameborder="0" height="500"></iframe>
-  </div>
-</div>
-{% endfor %} 
-
 {% endblock %}
 
 
