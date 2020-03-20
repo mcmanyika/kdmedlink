@@ -36,6 +36,7 @@ urlpatterns = [
     path('ajax/trip/create/', CreateCall.as_view(), name='trip_ajax_create'),
     path('ajax/trip/delete/', DeleteCall.as_view(), name='trip_ajax_delete'),
     path('ajax/trip/update/', UpdateTrip.as_view(), name='trip_ajax_update'),
+
     url(r'^call-details/(?P<id>.*)$', call_details, name='call-details'),
 
     

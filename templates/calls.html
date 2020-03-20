@@ -1,7 +1,6 @@
-{% extends 'base.html' %}
+{% extends 'sidebarBase.html' %}
 {% load static %}
 
-{% block title %}Daily Call Log{% endblock %}
 
 {% block content %}
 
@@ -16,7 +15,7 @@
           <div class="form-group">
             <select name="driver" class="form-control" required>
               {% for rw in staff %}
-              <option value="{{rw.name}}">{{rw.name}}</option>
+              <option value="{{rw.fname}} {{rw.lname}}">{{rw.fname}} {{rw.lname}}</option>
               {% endfor %}
             </select>
           </div>
@@ -49,8 +48,10 @@
           {% for call in calls %}
           <tr id="call-{{call.id}}">
               <td class="userName userData" name="name">{{call.trip_no}}</td>
-              <td class="userAddress userData" name="address">{{call.driver}}</td>
-              <td class="userAge userData" name="age"><a href="#call{{call.id}}" data-toggle="modal">{{call.notes}}</a></td>
+              <td class="userAddress userData" name="address">
+              {{call.driver}}
+            </td>
+              <td class="userAge userData" name="age"><a href="{% url 'call-details' call.id %}">{{call.notes}}</a></td>
               
               <td align="center" width="5%">
                   <button class="btn btn-danger form-control" onClick="deleteCall({{call.id}})">DELETE</button>
@@ -87,23 +88,33 @@
       </div>
     </div>
   </div>
-{% endblock %}
 
-{% block javascript %}
-
-{% for call in calls %}
-<div id="call{{call.id}}" class="modal fade" role="dialog">
-      <div class="modal-dialog">
-        <!-- Modal content-->
-        <div class="modal-content">
-          <div class="modal-body">
-              <iframe src="{% url 'call-details' call.id %}" width="100%" frameborder="0" height="500"></iframe>
+  {% for call in calls %}
+  <div id="call{{call.id}}" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="modal-body">
+                <iframe src="{% url 'call-details' call.id %}" width="100%" frameborder="0" height="500"></iframe>
+            </div>
           </div>
         </div>
       </div>
-    </div>
   {% endfor %}  
 
+  {% for rw in calls %}
+  <div id="overlay" class="overlay">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeOverlay()">&times;</a>
+  <div class="overlay-content">
+    <iframe src="{% url 'call-details' call.id %}" width="100%" frameborder="0" height="500"></iframe>
+  </div>
+</div>
+{% endfor %} 
+
+{% endblock %}
+
+
+{% block javascript %}
 <script>
 // Create Django Ajax Call
 $("form#addUser").submit(function() {

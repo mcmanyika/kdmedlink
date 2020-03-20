@@ -9,8 +9,9 @@ class CrudUser(models.Model):
     def __unicode__(self):
         return 'CrudUser {}'.format(self.id)
 
-class t_staff(models.Model):
-	name = models.CharField(max_length=40, blank=True, null=True)
+class t_acct(models.Model):
+	fname = models.CharField(max_length=40, blank=True, null=True)
+	lname = models.CharField(max_length=40, blank=True, null=True)
 	position = models.CharField(max_length=30)
 	status = models.CharField(max_length=30, default='Active')
 	user = models.IntegerField(default=1, null=True, blank=True)
@@ -18,7 +19,7 @@ class t_staff(models.Model):
 	updated = models.DateTimeField(auto_now_add = False, auto_now=True)
 
 	def __unicode__(self):
-		return 't_staff {}'.format(self.id)
+		return 't_acct {}'.format(self.id)
 
 class t_calls(models.Model):
 	# rootid = models.ForeignKey(t_staff, on_delete=models.CASCADE)

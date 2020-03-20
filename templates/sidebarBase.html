@@ -1,0 +1,16 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+{% include 'head.html' %}
+<body>
+
+{% include 'header.html' %}
+
+<div id="main">
+   <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
+    {% block content %}
+    {% endblock content %}
+</div>
+{% include 'scripts.html' %}
+</body>
+</html> 

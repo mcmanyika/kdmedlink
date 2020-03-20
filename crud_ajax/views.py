@@ -2,10 +2,11 @@ from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import  login_required
-from .models import CrudUser, t_calls, t_staff, t_dict
+from .models import CrudUser, t_calls, t_acct, t_dict
 from django.views.generic import TemplateView, View, DeleteView
 from django.core import serializers
 from django.http import JsonResponse
+from .forms import *
 
 # view front page
 @login_required(login_url='/login/')
@@ -76,8 +77,11 @@ class CallsView(TemplateView):
     def get_context_data(self, **kwargs):
         context = {}
         context['calls'] = t_calls.objects.all().order_by('-id')
-        context['staff'] = t_staff.objects.all()
+        context['staff'] = t_acct.objects.all()
         context['dict'] = t_dict.objects.all()
+
+        
+        
         return context
 
 
@@ -163,6 +167,24 @@ def call_details(request, id):
 
     return render (request, template, context)
 
+def add_acct(request):
+
+    form = AddAcctForm(request.POST or None, request.FILES or None)
+    if form.is_valid():
+        f = form.save(commit=False)
+        f.save()
+        messages.success(request, "Saved")
+        return HttpResponseRedirect('/')
+    
+    context = {
+        "form" : form,
+        
+    }    
+
+    template = "addacct.html"    
+
+    return render(request, template, context) 
+    
 def Logout(request):
     logout(request)
     return HttpResponseRedirect('/')
