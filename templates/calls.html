@@ -1,44 +1,14 @@
-{% extends 'sidebarBase.html' %}
+{% extends 'base.html' %}
 {% load static %}
 
 
 {% block content %}
-
+<span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
+<center><a style="cursor:pointer" onclick="openRightNav()">ADD CALL </a></center>
 <div class="container">
     <div class="row">
-      <div class="col-md-4 ">
-        <h3>ADD CALL</h3>
-        <form id="addUser" action="">
-          <div class="form-group">
-            <input class="form-control" type="text" name="trip_no" placeholder="Trip Number" required>
-          </div>
-          <div class="form-group">
-            <select name="driver" class="form-control" required>
-              {% for rw in staff %}
-              <option value="{{rw.fname}} {{rw.lname}}">{{rw.fname}} {{rw.lname}}</option>
-              {% endfor %}
-            </select>
-          </div>
-          <div class="form-group">
-            <select name="notes" class="form-control" required>
-              {% for rw in dict %}
-                {% if rw.category == 'notes' %}
-                  <option value="{{rw.name}}">{{rw.name}}</option>
-                {% endif %}
-              {% endfor %}
-            </select>
-          </div>
-          <div class="form-group">
-             <textarea  name="private_notes" class="form-control" rows="10">
-              </textarea> 
-          </div>
-          <button class="btn btn-primary form-control" type="submit">SUBMIT</button>
-          <input type="hidden" name="user" value="{{ request.user.id }}">
-          <input type="hidden" name="timestamp" value="">
-        </form>
-      </div>
-      <div class="col-md-8">
-        <h3>CALL LOG</h3>
+      <div class="col-md-12">
+        <h3>&nbsp;</h3>
         <table id="userTable" class="table table-striped">
           <tr>
             <th>Trip No</th>
